@@ -1,7 +1,7 @@
 export interface Gift {
-  id: number;
   item: string;
   url: string;
+  preco: string;
   porQuem: string;
   mensagem: string;
   comprado: boolean;
@@ -14,10 +14,10 @@ export interface GiftFormData {
 }
 
 export interface ApiGift {
-  ID: number;
   Item: string;
-  URL: string;
-  "Por quem?": string;
-  Mensagem: string;
-  Comprado: string;
+  Link: string;
+  Preço: string;
+  "Por quem?"?: string;
+  Mensagem?: string;
+  "Comprado?": string;
 }

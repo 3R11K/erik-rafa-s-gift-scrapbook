@@ -2,15 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { Gift, ApiGift, GiftFormData } from '@/types/gift';
 import { scrapeImageFromUrl } from '@/utils/imageScaper';
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbx2yGugXwj3oLPz_ztDIqGKOCroF9sRNYGgitrOFDfjF75MyutbXN51EocDjP_A4xRy/exec';
+const READ_API_URL = 'https://opensheet.elk.sh/153s1a1yU01oALeg248Sr6Isi5wcKv0sEK_wnLb_89rk/cha_casa_nova';
+const WRITE_API_URL = 'https://script.google.com/macros/s/AKfycbw8HflNF8_a0UFzen6Afi16ndgRr0DGCX1EHTrmL1ntiGHVrGYcPAOOpudPoGVxTGET/exec';
 
 const transformApiGift = (apiGift: ApiGift): Gift => ({
-  id: apiGift.ID,
   item: apiGift.Item,
-  url: apiGift.URL,
+  url: apiGift.Link,
+  preco: apiGift.Preço || '',
   porQuem: apiGift["Por quem?"] || '',
   mensagem: apiGift.Mensagem || '',
-  comprado: apiGift.Comprado?.toLowerCase() === 'sim',
+  comprado: apiGift["Comprado?"]?.toUpperCase() === 'TRUE',
 });
 
 export const useGifts = () => {
@@ -23,7 +24,7 @@ export const useGifts = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch(API_URL);
+      const response = await fetch(READ_API_URL);
       
       if (!response.ok) {
         throw new Error('Não foi possível carregar a lista de presentes');
@@ -49,17 +50,18 @@ export const useGifts = () => {
     }
   }, []);
 
-  const markAsGifted = async (giftId: number, formData: GiftFormData): Promise<boolean> => {
+  const markAsGifted = async (itemName: string, formData: GiftFormData): Promise<boolean> => {
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(WRITE_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'text/plain',
         },
         body: JSON.stringify({
-          id: giftId,
-          porQuem: formData.nome,
-          mensagem: formData.mensagem,
+          Item: itemName,
+          "Por quem?": formData.nome,
+          Mensagem: formData.mensagem,
+          "Comprado?": "TRUE",
         }),
       });
       
@@ -70,7 +72,7 @@ export const useGifts = () => {
       // Update local state optimistically
       setGifts(prevGifts => 
         prevGifts.map(gift => 
-          gift.id === giftId 
+          gift.item === itemName 
             ? { 
                 ...gift, 
                 comprado: true, 
