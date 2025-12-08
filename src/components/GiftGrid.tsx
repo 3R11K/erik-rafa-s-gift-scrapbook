@@ -8,10 +8,11 @@ interface GiftGridProps {
   loading: boolean;
   error: string | null;
   onSelectGift: (gift: Gift) => void;
+  onUnmarkGift?: (gift: Gift) => void;
   onRetry: () => void;
 }
 
-export const GiftGrid = ({ gifts, loading, error, onSelectGift, onRetry }: GiftGridProps) => {
+export const GiftGrid = ({ gifts, loading, error, onSelectGift, onUnmarkGift, onRetry }: GiftGridProps) => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
@@ -94,13 +95,14 @@ export const GiftGrid = ({ gifts, loading, error, onSelectGift, onRetry }: GiftG
           <h2 className="font-script text-2xl md:text-3xl text-center text-foreground mb-6 hand-underline inline-block mx-auto w-full">
             <span className="inline-block">Presentes Disponíveis ✨</span>
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 md:gap-12 lg:gap-16">
             {availableGifts.map((gift, index) => (
               <GiftCard 
                 key={gift.item} 
                 gift={gift} 
                 index={index}
                 onSelect={onSelectGift}
+                onUnmark={onUnmarkGift}
               />
             ))}
           </div>
@@ -113,13 +115,14 @@ export const GiftGrid = ({ gifts, loading, error, onSelectGift, onRetry }: GiftG
           <h2 className="font-script text-2xl md:text-3xl text-center text-kraft mb-6">
             Já Presenteados 💕
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 md:gap-12 lg:gap-16">
             {purchasedGifts.map((gift, index) => (
               <GiftCard 
                 key={gift.item} 
                 gift={gift} 
                 index={index + availableGifts.length}
                 onSelect={onSelectGift}
+                onUnmark={onUnmarkGift}
               />
             ))}
           </div>

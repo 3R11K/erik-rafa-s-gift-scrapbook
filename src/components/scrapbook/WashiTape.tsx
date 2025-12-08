@@ -1,50 +1,84 @@
 import { cn } from '@/lib/utils';
 
 interface WashiTapeProps {
-  variant?: 'pink' | 'mint' | 'blue';
+  variant?: 'pink' | 'mint' | 'blue' | 'yellow' | 'lavender';
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center';
   rotation?: number;
   className?: string;
+  length?: number;
 }
 
 export const WashiTape = ({ 
   variant = 'pink', 
   position = 'top-left',
   rotation = -5,
-  className 
+  className,
+  length = 100
 }: WashiTapeProps) => {
   const positionClasses = {
-    'top-left': '-top-2 -left-4',
-    'top-right': '-top-2 -right-4',
-    'bottom-left': '-bottom-2 -left-4',
-    'bottom-right': '-bottom-2 -right-4',
-    'top-center': '-top-2 left-1/2 -translate-x-1/2',
+    'top-left': '-top-3 -left-6',
+    'top-right': '-top-3 -right-6',
+    'bottom-left': '-bottom-3 -left-6',
+    'bottom-right': '-bottom-3 -right-6',
+    'top-center': '-top-3 left-1/2 -translate-x-1/2',
   };
 
-  const variantClasses = {
-    pink: 'bg-gradient-to-r from-blush/60 to-peach/60',
-    mint: 'bg-gradient-to-r from-mint/60 to-secondary/60',
-    blue: 'bg-gradient-to-r from-sky/60 to-accent/60',
+  // Fita transparente realista - tipo scotch/durex
+  const tapeStyles = {
+    pink: {
+      background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 100%)',
+      border: 'none',
+    },
+    mint: {
+      background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 100%)',
+      border: 'none',
+    },
+    blue: {
+      background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 100%)',
+      border: 'none',
+    },
+    yellow: {
+      background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 100%)',
+      border: 'none',
+    },
+    lavender: {
+      background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 100%)',
+      border: 'none',
+    },
   };
+
+  const style = tapeStyles[variant];
 
   return (
     <div 
       className={cn(
-        'absolute h-5 w-16 md:h-6 md:w-20 rounded-sm shadow-tape',
+        'absolute h-7 z-20',
         positionClasses[position],
-        variantClasses[variant],
         className
       )}
       style={{ 
+        width: `${length}px`,
         transform: `rotate(${rotation}deg)`,
-        backgroundImage: `repeating-linear-gradient(
-          ${variant === 'mint' ? '-45deg' : '45deg'},
-          transparent,
-          transparent 2px,
-          rgba(255,255,255,0.3) 2px,
-          rgba(255,255,255,0.3) 4px
-        )`,
+        background: style.background,
+        border: style.border,
+        backdropFilter: 'blur(0.5px)',
+        boxShadow: `
+          0 1px 2px rgba(0, 0, 0, 0.08),
+          0 2px 4px rgba(0, 0, 0, 0.05),
+          inset 0 1px 1px rgba(255, 255, 255, 0.8),
+          inset 0 -1px 1px rgba(255, 255, 255, 0.6)
+        `,
+        borderRadius: '1px',
+        opacity: 0.75,
       }}
-    />
+    >
+      {/* Textura de fita - linhas sutis */}
+      <div 
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255,255,255,0.4) 1px, rgba(255,255,255,0.4) 2px)',
+        }}
+      />
+    </div>
   );
 };

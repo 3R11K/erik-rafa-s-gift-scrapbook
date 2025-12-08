@@ -3,7 +3,7 @@ import { Gift, ApiGift, GiftFormData } from '@/types/gift';
 import { scrapeImageFromUrl } from '@/utils/imageScaper';
 
 const READ_API_URL = 'https://opensheet.elk.sh/153s1a1yU01oALeg248Sr6Isi5wcKv0sEK_wnLb_89rk/cha_casa_nova';
-const WRITE_API_URL = 'https://script.google.com/macros/s/AKfycbw8HflNF8_a0UFzen6Afi16ndgRr0DGCX1EHTrmL1ntiGHVrGYcPAOOpudPoGVxTGET/exec';
+const WRITE_API_URL = 'https://script.google.com/macros/s/AKfycbw0ezmXWICPJr2nWGt-BWcekMz8Kfoj8TskPIEI_hD-QBB2Qnz6yzG93UU328lvd80/exec';
 
 const transformApiGift = (apiGift: ApiGift): Gift => ({
   item: apiGift.Item,
@@ -92,6 +92,47 @@ export const useGifts = () => {
     }
   };
 
+  const unmarkGift = async (itemName: string, buyerName: string): Promise<boolean> => {
+    try {
+      const response = await fetch(WRITE_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+        body: JSON.stringify({
+          Item: itemName,
+          "Por quem?": buyerName,
+          "Comprado?": "FALSE",
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Erro ao desmarcar presente');
+      }
+      
+      // Update local state optimistically
+      setGifts(prevGifts => 
+        prevGifts.map(gift => 
+          gift.item === itemName 
+            ? { 
+                ...gift, 
+                comprado: false, 
+                porQuem: '', 
+                mensagem: '' 
+              }
+            : gift
+        )
+      );
+      
+      return true;
+    } catch (err) {
+      console.error('Error unmarking gift:', err);
+      // Refresh the list to get current state
+      await fetchGifts();
+      return false;
+    }
+  };
+
   useEffect(() => {
     fetchGifts();
   }, [fetchGifts]);
@@ -102,5 +143,6 @@ export const useGifts = () => {
     error,
     refetch: fetchGifts,
     markAsGifted,
+    unmarkGift,
   };
 };

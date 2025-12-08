@@ -54,13 +54,25 @@ export const GiftModal = ({ gift, isOpen, onClose, onSubmit }: GiftModalProps) =
       <div 
         className={cn(
           'relative w-full max-w-md paper-card rounded-xl p-6 md:p-8 animate-scale-in',
-          'border-4 border-cream shadow-scrapbook'
+          'border-2 border-kraft/20 shadow-2xl'
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Decorative Tapes */}
-        <WashiTape variant="pink" position="top-left" rotation={-15} />
-        <WashiTape variant="mint" position="top-right" rotation={12} />
+        {/* Decorative corner stickers */}
+        <div className="absolute -top-3 -left-3 text-3xl drop-shadow-lg animate-wiggle z-30">💝</div>
+        <div className="absolute -top-3 -right-3 text-3xl drop-shadow-lg animate-wiggle z-30" style={{ animationDelay: '0.5s' }}>🌸</div>
+        
+        {/* Decorative Tapes - more visible */}
+        <WashiTape variant="pink" position="top-left" rotation={-15} length={110} />
+        <WashiTape variant="mint" position="top-right" rotation={12} length={110} />
+        
+        {/* Additional bottom tapes */}
+        <div className="absolute bottom-4 left-8">
+          <WashiTape variant="blue" rotation={5} length={80} />
+        </div>
+        <div className="absolute bottom-4 right-8">
+          <WashiTape variant="yellow" rotation={-8} length={75} />
+        </div>
 
         {/* Close Button */}
         <button 
@@ -84,7 +96,7 @@ export const GiftModal = ({ gift, isOpen, onClose, onSubmit }: GiftModalProps) =
         {/* Header */}
         <div className="text-center mb-6 mt-4">
           <h2 className="font-script text-2xl md:text-3xl text-foreground mb-2">
-            Quero presentear! 
+            Vou presentear! 
             <Sparkles className="inline-block w-5 h-5 ml-2 text-peach animate-sparkle" />
           </h2>
           <p className="font-hand text-kraft text-lg">
@@ -144,13 +156,16 @@ export const GiftModal = ({ gift, isOpen, onClose, onSubmit }: GiftModalProps) =
             type="submit"
             disabled={isSubmitting}
             className={cn(
-              'w-full py-3 px-6 rounded-full font-handwritten text-xl',
-              'bg-gradient-to-r from-primary via-blush to-peach text-primary-foreground',
+              'w-full py-3 px-6 rounded-full font-handwritten text-xl font-semibold',
               'shadow-sticker hover:shadow-scrapbook',
               'transition-all duration-300 hover:scale-[1.02]',
               'flex items-center justify-center gap-2',
               'disabled:opacity-60 disabled:cursor-not-allowed'
             )}
+            style={{
+              background: 'linear-gradient(135deg, #a88a6f 0%, #8a6f57 100%)',
+              color: '#ffffff'
+            }}
           >
             {isSubmitting ? (
               <>
