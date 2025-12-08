@@ -9,7 +9,7 @@ interface GiftModalProps {
   gift: Gift;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (giftId: number, data: GiftFormData) => Promise<boolean>;
+  onSubmit: (itemName: string, data: GiftFormData) => Promise<boolean>;
 }
 
 export const GiftModal = ({ gift, isOpen, onClose, onSubmit }: GiftModalProps) => {
@@ -28,7 +28,7 @@ export const GiftModal = ({ gift, isOpen, onClose, onSubmit }: GiftModalProps) =
     setIsSubmitting(true);
     setError(null);
 
-    const success = await onSubmit(gift.id, formData);
+    const success = await onSubmit(gift.item, formData);
     
     if (success) {
       setFormData({ nome: '', mensagem: '' });

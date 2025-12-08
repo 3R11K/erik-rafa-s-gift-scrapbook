@@ -97,7 +97,7 @@ export const GiftGrid = ({ gifts, loading, error, onSelectGift, onRetry }: GiftG
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {availableGifts.map((gift, index) => (
               <GiftCard 
-                key={gift.id} 
+                key={gift.item} 
                 gift={gift} 
                 index={index}
                 onSelect={onSelectGift}
@@ -116,7 +116,7 @@ export const GiftGrid = ({ gifts, loading, error, onSelectGift, onRetry }: GiftG
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {purchasedGifts.map((gift, index) => (
               <GiftCard 
-                key={gift.id} 
+                key={gift.item} 
                 gift={gift} 
                 index={index + availableGifts.length}
                 onSelect={onSelectGift}

@@ -26,8 +26,8 @@ const Index = () => {
     setSelectedGift(null);
   }, []);
 
-  const handleSubmitGift = useCallback(async (giftId: number, data: GiftFormData) => {
-    const success = await markAsGifted(giftId, data);
+  const handleSubmitGift = useCallback(async (itemName: string, data: GiftFormData) => {
+    const success = await markAsGifted(itemName, data);
     
     if (success) {
       setToast({
