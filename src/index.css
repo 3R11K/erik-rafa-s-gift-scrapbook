@@ -1,95 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Patrick+Hand&family=Dancing+Script:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Scrapbook Palette */
+    --background: 40 30% 96%;
+    --foreground: 25 30% 25%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 45 40% 97%;
+    --card-foreground: 25 30% 25%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 45 40% 97%;
+    --popover-foreground: 25 30% 25%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 350 60% 70%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 160 40% 85%;
+    --secondary-foreground: 160 40% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 45 30% 90%;
+    --muted-foreground: 25 20% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 200 50% 80%;
+    --accent-foreground: 200 50% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 30 20% 80%;
+    --input: 30 20% 85%;
+    --ring: 350 60% 70%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom Scrapbook Colors */
+    --blush: 350 60% 75%;
+    --mint: 160 45% 75%;
+    --cream: 45 50% 92%;
+    --sky: 200 60% 80%;
+    --lavender: 280 40% 85%;
+    --peach: 25 70% 85%;
+    --paper: 40 30% 94%;
+    --kraft: 30 25% 70%;
+    --washi-pink: 350 70% 80%;
+    --washi-mint: 160 50% 80%;
+    --washi-blue: 200 60% 75%;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -100,6 +67,187 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-handwritten;
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsl(var(--blush) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--mint) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, hsl(var(--sky) / 0.05) 0%, transparent 70%);
   }
+}
+
+@layer utilities {
+  /* Paper Textures */
+  .paper-texture {
+    background-color: hsl(var(--cream));
+    background-image: 
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  .paper-card {
+    @apply paper-texture;
+    box-shadow: 
+      2px 3px 8px hsl(var(--kraft) / 0.2),
+      inset 0 0 30px hsl(var(--cream) / 0.5);
+  }
+
+  /* Torn Edge Effect */
+  .torn-edge {
+    clip-path: polygon(
+      0% 2%, 3% 0%, 8% 3%, 12% 1%, 18% 2%, 22% 0%, 28% 3%, 33% 1%, 38% 2%, 
+      42% 0%, 48% 3%, 52% 1%, 58% 2%, 62% 0%, 68% 3%, 72% 1%, 78% 2%, 
+      82% 0%, 88% 3%, 92% 1%, 97% 2%, 100% 0%,
+      100% 98%, 97% 100%, 92% 97%, 88% 99%, 82% 98%, 78% 100%, 72% 97%, 
+      68% 99%, 62% 98%, 58% 100%, 52% 97%, 48% 99%, 42% 98%, 38% 100%, 
+      33% 97%, 28% 99%, 22% 98%, 18% 100%, 12% 97%, 8% 99%, 3% 98%, 0% 100%
+    );
+  }
+
+  /* Washi Tape */
+  .washi-tape {
+    @apply absolute h-6 w-20 opacity-80;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      hsl(var(--washi-pink) / 0.3) 2px,
+      hsl(var(--washi-pink) / 0.3) 4px
+    );
+    transform: rotate(-3deg);
+  }
+
+  .washi-tape-mint {
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 3px,
+      hsl(var(--washi-mint) / 0.4) 3px,
+      hsl(var(--washi-mint) / 0.4) 6px
+    );
+  }
+
+  .washi-tape-blue {
+    background: repeating-linear-gradient(
+      45deg,
+      hsl(var(--washi-blue) / 0.5),
+      hsl(var(--washi-blue) / 0.5) 3px,
+      hsl(var(--washi-blue) / 0.3) 3px,
+      hsl(var(--washi-blue) / 0.3) 6px
+    );
+  }
+
+  /* Scrapbook Rotations */
+  .scrapbook-tilt-1 { transform: rotate(-2deg); }
+  .scrapbook-tilt-2 { transform: rotate(1.5deg); }
+  .scrapbook-tilt-3 { transform: rotate(-1deg); }
+  .scrapbook-tilt-4 { transform: rotate(2deg); }
+
+  /* Sticker Effect */
+  .sticker {
+    @apply inline-block px-3 py-1 rounded-full font-bold;
+    background: linear-gradient(135deg, hsl(var(--blush)) 0%, hsl(var(--peach)) 100%);
+    box-shadow: 
+      2px 2px 4px hsl(var(--kraft) / 0.3),
+      inset 0 1px 2px hsl(0 0% 100% / 0.5);
+  }
+
+  .sticker-mint {
+    background: linear-gradient(135deg, hsl(var(--mint)) 0%, hsl(var(--sky)) 100%);
+  }
+
+  /* Purchased Overlay */
+  .purchased-overlay {
+    @apply relative;
+  }
+
+  .purchased-overlay::after {
+    content: '';
+    @apply absolute inset-0 bg-background/60 backdrop-blur-[2px] rounded-lg;
+  }
+
+  /* Handwritten underline */
+  .hand-underline {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10'%3E%3Cpath d='M0,8 Q25,2 50,8 T100,8' stroke='%23e8b4b8' fill='none' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 100% 8px;
+    padding-bottom: 8px;
+  }
+
+  /* Doodle Hearts */
+  .doodle-heart::before {
+    content: '♡';
+    @apply text-primary opacity-60 text-lg;
+  }
+
+  /* Photo Corner Effect */
+  .photo-corner::before,
+  .photo-corner::after {
+    content: '';
+    @apply absolute w-6 h-6;
+    background: linear-gradient(135deg, hsl(var(--kraft)) 50%, transparent 50%);
+  }
+
+  .photo-corner::before {
+    @apply top-0 left-0;
+  }
+
+  .photo-corner::after {
+    @apply bottom-0 right-0;
+    transform: rotate(180deg);
+  }
+}
+
+/* Custom Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+@keyframes heart-beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.animate-heart-beat {
+  animation: heart-beat 1s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--cream));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--blush));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
 }
