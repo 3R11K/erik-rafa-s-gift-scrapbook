@@ -73,9 +73,16 @@ export const GiftCard = ({ gift, index, onSelect }: GiftCardProps) => {
         </div>
 
         {/* Item Name */}
-        <h3 className="font-handwritten text-xl md:text-2xl text-foreground mb-2 leading-tight line-clamp-2">
+        <h3 className="font-handwritten text-xl md:text-2xl text-foreground mb-1 leading-tight line-clamp-2">
           {gift.item}
         </h3>
+
+        {/* Price */}
+        {gift.preco && (
+          <p className="font-hand text-lg text-primary font-semibold mb-2">
+            {gift.preco.startsWith('$') ? `R${gift.preco}` : gift.preco}
+          </p>
+        )}
 
         {/* Actions */}
         <div className="flex items-center justify-between gap-2 mt-3">
