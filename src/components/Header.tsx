@@ -7,8 +7,8 @@ export const Header = () => {
       {/* Elegant washi tapes - Rose, Brown & Green */}
       <div className="washi-tape-rose top-0 left-0 right-0 h-7 rotate-[-1deg]" />
       <div className="washi-tape-sage bottom-0 left-0 right-0 h-6 rotate-[1deg]" />
-      <div className="washi-tape-brown top-10 left-1/4 w-28 rotate-[88deg] z-20" />
-      <div className="washi-tape-blush top-10 right-1/4 w-24 rotate-[-85deg] z-20" />
+      <div className="washi-tape-brown top-10 left-1/4 w-28 rotate-[88deg] z-0 md:z-20" />
+      <div className="washi-tape-blush top-10 right-1/4 w-24 rotate-[-85deg] z-0 md:z-20" />
       
       {/* Scrapbook page background */}
       <div className="absolute inset-0 bg-gradient-to-b from-vintage-cream/40 via-transparent to-transparent" />

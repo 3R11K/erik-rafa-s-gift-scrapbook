@@ -170,7 +170,10 @@ export const GiftCard = ({ gift, index, onSelect, onUnmark }: GiftCardProps) => 
 
           {!gift.comprado && (
             <button
-              onClick={() => onSelect(gift)}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(gift);
+              }}
               className="inline-flex items-center gap-1 md:gap-1.5 px-2.5 py-1.5 md:px-4 md:py-2 rounded-full font-hand text-xs md:text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-110 relative overflow-hidden group/btn"
               style={{
                 background: 'linear-gradient(135deg, #a88a6f 0%, #9b8070 100%)',

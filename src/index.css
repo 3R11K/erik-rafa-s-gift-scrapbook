@@ -79,6 +79,12 @@
     @apply border-border;
   }
 
+  html,
+  body {
+    @apply overflow-x-hidden;
+    max-width: 100vw;
+  }
+
   body {
     @apply bg-background text-foreground font-handwritten;
     background-color: #faf8f5;
