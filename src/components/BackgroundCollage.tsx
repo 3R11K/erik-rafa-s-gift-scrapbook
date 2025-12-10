@@ -77,9 +77,9 @@ export const BackgroundCollage = () => {
           }));
         }
         
-        // SEMPRE fazer shuffle e selecionar 6-7 fotos aleatórias
+        // SEMPRE fazer shuffle e selecionar 8 fotos aleatórias
         const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
-        const selectedPhotos = shuffled.slice(0, shuffled.length > 7 ? 7 : 6);
+        const selectedPhotos = shuffled.slice(0, 8);
         
         setPhotos(selectedPhotos);
       } catch (error) {
@@ -91,7 +91,7 @@ export const BackgroundCollage = () => {
           const parsed: CachedData = JSON.parse(cachedData);
           // SEMPRE fazer shuffle mesmo no fallback
           const shuffled = [...parsed.photos].sort(() => Math.random() - 0.5);
-          const selectedPhotos = shuffled.slice(0, shuffled.length > 7 ? 7 : 6);
+          const selectedPhotos = shuffled.slice(0, 8);
           setPhotos(selectedPhotos);
         }
       }
