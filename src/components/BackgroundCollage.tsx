@@ -35,59 +35,53 @@ export const BackgroundCollage = () => {
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        // Verificar cache primeiro
+        // Verificar cache de todas as fotos
         const cachedData = localStorage.getItem(CACHE_KEY);
         const cachedIds = localStorage.getItem(CACHE_IDS_KEY);
         
+        let allPhotos: DrivePhoto[] = [];
+
+        // Se tem cache válido (dentro de 24h), usar
         if (cachedData && cachedIds) {
           const parsed: CachedData = JSON.parse(cachedData);
           const now = Date.now();
           
-          // Se o cache ainda é válido (dentro de 24h)
           if (now - parsed.timestamp < CACHE_DURATION) {
-            setPhotos(parsed.photos);
-            return;
+            allPhotos = parsed.photos;
           }
         }
 
-        // Buscar do servidor
-        const response = await fetch(PHOTOS_API);
-        const data: DrivePhoto[] = await response.json();
-        
-        // Extrair IDs atuais
-        const currentIds = data.map(p => p.id).sort().join(',');
-        
-        // Se os IDs são os mesmos do cache, usar cache
-        if (cachedIds === currentIds && cachedData) {
-          const parsed: CachedData = JSON.parse(cachedData);
-          setPhotos(parsed.photos);
+        // Se não tem cache válido, buscar do servidor
+        if (allPhotos.length === 0) {
+          const response = await fetch(PHOTOS_API);
+          const data: DrivePhoto[] = await response.json();
           
-          // Atualizar timestamp do cache
+          // Extrair IDs atuais
+          const currentIds = data.map(p => p.id).sort().join(',');
+          
+          // Se os IDs mudaram, atualizar cache
+          if (cachedIds !== currentIds) {
+            localStorage.setItem(CACHE_IDS_KEY, currentIds);
+          }
+          
+          // Adicionar proxy CORS para TODAS as fotos
+          allPhotos = data.map(photo => ({
+            ...photo,
+            url: `https://images.weserv.nl/?url=${encodeURIComponent(photo.url)}`
+          }));
+          
+          // Salvar TODAS as fotos no cache
           localStorage.setItem(CACHE_KEY, JSON.stringify({
-            photos: parsed.photos,
+            photos: allPhotos,
             timestamp: Date.now()
           }));
-          return;
         }
         
-        // Pegar apenas 6-7 fotos aleatórias para não poluir
-        const shuffled = data.sort(() => Math.random() - 0.5);
+        // SEMPRE fazer shuffle e selecionar 6-7 fotos aleatórias
+        const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
         const selectedPhotos = shuffled.slice(0, shuffled.length > 7 ? 7 : 6);
         
-        // Adicionar proxy CORS para as URLs das imagens
-        const photosWithProxy = selectedPhotos.map(photo => ({
-          ...photo,
-          url: `https://images.weserv.nl/?url=${encodeURIComponent(photo.url)}`
-        }));
-        
-        // Salvar no cache
-        localStorage.setItem(CACHE_KEY, JSON.stringify({
-          photos: photosWithProxy,
-          timestamp: Date.now()
-        }));
-        localStorage.setItem(CACHE_IDS_KEY, currentIds);
-        
-        setPhotos(photosWithProxy);
+        setPhotos(selectedPhotos);
       } catch (error) {
         console.error('Erro ao carregar fotos do Drive:', error);
         
@@ -95,7 +89,10 @@ export const BackgroundCollage = () => {
         const cachedData = localStorage.getItem(CACHE_KEY);
         if (cachedData) {
           const parsed: CachedData = JSON.parse(cachedData);
-          setPhotos(parsed.photos);
+          // SEMPRE fazer shuffle mesmo no fallback
+          const shuffled = [...parsed.photos].sort(() => Math.random() - 0.5);
+          const selectedPhotos = shuffled.slice(0, shuffled.length > 7 ? 7 : 6);
+          setPhotos(selectedPhotos);
         }
       }
     };
