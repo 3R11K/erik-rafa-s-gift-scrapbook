@@ -3,6 +3,10 @@ import { useState, useEffect } from 'react';
 // API endpoint que retorna as fotos do Google Drive
 const PHOTOS_API = 'https://script.google.com/macros/s/AKfycbyAEPKPl-7_ZGNOk1HPDCkMZ8cfQtDZlAmh-78t0_TA3u1kU5H7kYf22J9pvtB6nr6y/exec';
 
+const CACHE_KEY = 'background-photos-cache';
+const CACHE_IDS_KEY = 'background-photos-ids';
+const CACHE_DURATION = 1000 * 60 * 60 * 24; // 24 horas
+
 interface DrivePhoto {
   nome: string;
   id: string;
@@ -18,6 +22,11 @@ interface PhotoPosition {
   zIndex: number;
 }
 
+interface CachedData {
+  photos: DrivePhoto[];
+  timestamp: number;
+}
+
 export const BackgroundCollage = () => {
   const [photos, setPhotos] = useState<DrivePhoto[]>([]);
   const [positions, setPositions] = useState<PhotoPosition[]>([]);
@@ -26,12 +35,44 @@ export const BackgroundCollage = () => {
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
+        // Verificar cache primeiro
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        const cachedIds = localStorage.getItem(CACHE_IDS_KEY);
+        
+        if (cachedData && cachedIds) {
+          const parsed: CachedData = JSON.parse(cachedData);
+          const now = Date.now();
+          
+          // Se o cache ainda é válido (dentro de 24h)
+          if (now - parsed.timestamp < CACHE_DURATION) {
+            setPhotos(parsed.photos);
+            return;
+          }
+        }
+
+        // Buscar do servidor
         const response = await fetch(PHOTOS_API);
         const data: DrivePhoto[] = await response.json();
         
+        // Extrair IDs atuais
+        const currentIds = data.map(p => p.id).sort().join(',');
+        
+        // Se os IDs são os mesmos do cache, usar cache
+        if (cachedIds === currentIds && cachedData) {
+          const parsed: CachedData = JSON.parse(cachedData);
+          setPhotos(parsed.photos);
+          
+          // Atualizar timestamp do cache
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            photos: parsed.photos,
+            timestamp: Date.now()
+          }));
+          return;
+        }
+        
         // Pegar apenas 6-7 fotos aleatórias para não poluir
         const shuffled = data.sort(() => Math.random() - 0.5);
-        const selectedPhotos = shuffled.slice(0, 7);
+        const selectedPhotos = shuffled.slice(0, shuffled.length > 7 ? 7 : 6);
         
         // Adicionar proxy CORS para as URLs das imagens
         const photosWithProxy = selectedPhotos.map(photo => ({
@@ -39,9 +80,23 @@ export const BackgroundCollage = () => {
           url: `https://images.weserv.nl/?url=${encodeURIComponent(photo.url)}`
         }));
         
+        // Salvar no cache
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          photos: photosWithProxy,
+          timestamp: Date.now()
+        }));
+        localStorage.setItem(CACHE_IDS_KEY, currentIds);
+        
         setPhotos(photosWithProxy);
       } catch (error) {
         console.error('Erro ao carregar fotos do Drive:', error);
+        
+        // Em caso de erro, tentar usar cache mesmo que expirado
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        if (cachedData) {
+          const parsed: CachedData = JSON.parse(cachedData);
+          setPhotos(parsed.photos);
+        }
       }
     };
 
